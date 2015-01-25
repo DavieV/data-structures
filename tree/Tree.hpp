@@ -17,6 +17,8 @@ class Tree {
         Node<T>* successor(T datum);
         Node<T>* predecessor(T datum);
 
+        Node<T>* min() { return min(root_); }
+        Node<T>* max() { return max(root_); }
         Node<T>* min(Node<T>* root);
         Node<T>* max(Node<T>* root);
 
@@ -143,6 +145,9 @@ Node<T>* Tree<T>::predecessor(T datum) {
     }
 }
 
+/*
+    Find the node with the lowest datum value, rooted at a specific subtree
+*/
 template <class T>
 Node<T>* Tree<T>::min(Node<T>* root) {
     if (root == nullptr)
@@ -152,6 +157,9 @@ Node<T>* Tree<T>::min(Node<T>* root) {
     return root;
 }
 
+/*
+    Find the node with the highst datum value, rooted at a specific subtree
+*/
 template <class T>
 Node<T>* Tree<T>::max(Node<T>* root) {
     if (root == nullptr)
