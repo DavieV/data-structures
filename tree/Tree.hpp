@@ -26,6 +26,8 @@ class Tree {
         void print() const;
         void print_inorder(Node<T>* node) const;
         void kill_tree(Node<T>* node);
+        size_t size() const;
+        size_t size(Node<T>* root) const;
 };
 
 template <class T>
@@ -182,7 +184,7 @@ void Tree<T>::print_inorder(Node<T>* node) const {
     print_inorder(node->right());
 }
 
-template<class T>
+template <class T>
 void Tree<T>::kill_tree(Node<T>* node) {
     if (node == nullptr) { // Base case
         delete node;
@@ -191,4 +193,17 @@ void Tree<T>::kill_tree(Node<T>* node) {
         kill_tree(node->right());
         delete node;
     }
+}
+
+template <class T>
+size_t Tree<T>::size() const {
+    return size(root_);
+}
+
+template <class T>
+size_t Tree<T>::size(Node<T>* root) const {
+    if (root == nullptr)
+        return 0;
+    else
+        return 1 + size(root->left()) + size(root->right());
 }

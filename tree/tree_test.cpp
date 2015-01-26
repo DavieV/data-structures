@@ -2,8 +2,7 @@
 #include <string>
 #include "Tree.hpp"
 
-int main()
-{
+int main() {
     Tree<int> t;
 
     t.insert(10);
@@ -13,13 +12,7 @@ int main()
     t.insert(11);
     t.insert(12);
 
-    // t.print();
-
-    Node<int>* succ = t.successor(12);
-    Node<int>* pred = t.predecessor(15);
-
-    std::cout << succ->datum() << std::endl;
-    std::cout << pred->datum() << std::endl;
+    std::cout << t.size() << std::endl;
 
     return 0;
 }
