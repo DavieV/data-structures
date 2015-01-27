@@ -12,7 +12,8 @@ int main() {
     t.insert(11);
     t.insert(12);
 
-    std::cout << t.size() << std::endl;
-
+    t.print_inorder();
+    t.print_preorder();
+    t.print_postorder();
     return 0;
 }

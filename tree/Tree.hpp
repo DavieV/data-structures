@@ -1,12 +1,13 @@
-#include "Node.hpp"
 #include <iostream>
+#include <queue>
+#include "Node.hpp"
 
 template <class T>
 class Tree {
     private:
         Node<T>* root_;
     public:
-        Tree() { root_ = nullptr; }
+        Tree() : root_(nullptr) {};
         Tree(T datum);
         ~Tree();
 
@@ -17,15 +18,21 @@ class Tree {
         Node<T>* successor(T datum);
         Node<T>* predecessor(T datum);
 
+        void breadth_first();
+
         Node<T>* min() { return min(root_); }
         Node<T>* max() { return max(root_); }
         Node<T>* min(Node<T>* root);
         Node<T>* max(Node<T>* root);
 
         // ========== Utility Funtions ==========
-        void print() const;
-        void print_inorder(Node<T>* node) const;
-        void kill_tree(Node<T>* node);
+        void print_inorder() const;
+        void print_inorder(Node<T>* root) const;
+        void print_preorder() const;
+        void print_preorder(Node<T>* ) const;
+        void print_postorder() const;
+        void print_postorder(Node<T>* root) const;
+        void kill_tree(Node<T>* root);
         size_t size() const;
         size_t size(Node<T>* root) const;
 };
@@ -129,21 +136,48 @@ Node<T>* Tree<T>::predecessor(T datum) {
         return nullptr;
     } else {
         Node<T>* tmp = root_;
-        Node<T>* pot_succ;
+        Node<T>* pot_pred;
         while (*(*tmp) != datum) {
             if (tmp == nullptr)
                 return nullptr;
             if (datum < *(*tmp)) {
                 tmp = tmp->left();
             } else {
-                pot_succ = tmp;
+                pot_pred = tmp;
                 tmp = tmp->right();
             }
         }
         if (tmp->left() != nullptr)
             return max(tmp->left());
         else
-            return pot_succ;
+            return pot_pred;
+    }
+}
+
+template <class T>
+void Tree<T>::breadth_first() {
+    std::queue<Node<T>*> q;
+    q.push(root_);
+    int next_row = 0;
+    int current_row = 1;
+    while (!q.empty()) {
+        auto top = q.front();
+        q.pop();
+        if (top->left() != nullptr) {
+            ++next_row;
+            q.push(top->left());
+        }
+        if (top->right() != nullptr) {
+            ++next_row;
+            q.push(top->right());
+        }
+        --current_row;
+        std::cout << top->datum() << " ";
+        if (current_row == 0) {  // Row has been completed
+            std::cout << std::endl;
+            current_row = next_row;
+            next_row = 0;
+        }
     }
 }
 
@@ -171,27 +205,57 @@ Node<T>* Tree<T>::max(Node<T>* root) {
     return root;
 }
 
+// ==================== Print Functions ====================
 template <class T>
-void Tree<T>::print() const {
+void Tree<T>::print_inorder() const {
     print_inorder(root_);
+    std::cout << "\n\n";
 }
 
 template <class T>
-void Tree<T>::print_inorder(Node<T>* node) const {
-    if (node == nullptr) return;  // Base case
-    print_inorder(node->left());
-    std::cout << *(*node) << std::endl;
-    print_inorder(node->right());
+void Tree<T>::print_inorder(Node<T>* root) const {
+    if (root == nullptr) return;  // Base case
+    print_inorder(root->left());
+    std::cout << *(*root) << " ";
+    print_inorder(root->right());
 }
 
 template <class T>
-void Tree<T>::kill_tree(Node<T>* node) {
-    if (node == nullptr) { // Base case
-        delete node;
+void Tree<T>::print_preorder() const {
+    print_preorder(root_);
+    std::cout << "\n\n";
+}
+
+template <class T>
+void Tree<T>::print_preorder(Node<T>* root) const {
+    if (root == nullptr) return;
+    std::cout << root->datum() << " ";
+    print_preorder(root->left());
+    print_preorder(root->right());
+}
+
+template <class T>
+void Tree<T>::print_postorder() const {
+    print_postorder(root_);
+    std::cout << "\n\n";
+}
+
+template <class T>
+void Tree<T>::print_postorder(Node<T>* root) const {
+    if (root == nullptr) return;
+    print_postorder(root->left());
+    print_postorder(root->right());
+    std::cout << root->datum() << " ";
+}
+
+template <class T>
+void Tree<T>::kill_tree(Node<T>* root) {
+    if (root == nullptr) { // Base case
+        return;
     } else {
-        kill_tree(node->left());
-        kill_tree(node->right());
-        delete node;
+        kill_tree(root->left());
+        kill_tree(root->right());
+        delete root;
     }
 }
 
