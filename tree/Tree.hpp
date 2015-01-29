@@ -45,7 +45,7 @@ Tree<T>::Tree(T datum) {
 template <class T>
 Tree<T>::~Tree() {
     if (root_ == nullptr) {
-        delete root_;
+        return;
     } else {
         kill_tree(root_);
     }
