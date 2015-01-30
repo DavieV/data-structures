@@ -22,9 +22,8 @@ Stack<T>::Stack(T datum) {
 
 template <class T>
 Stack<T>::~Stack() {
-    while (top_ != nullptr) {
+    while (top_ != nullptr)
         pop();
-    }
 }
 
 template <class T>
