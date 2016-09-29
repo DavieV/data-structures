@@ -1,56 +1,35 @@
+#ifndef DV_STACK
+#define DV_STACK
+
+#include <memory>
 #include "Node.hpp"
 
 template <class T>
 class Stack {
-    private:
-        Node<T>* top_;
-    public:
-        Stack() : top_(nullptr) {};
-        Stack(T datum);
-        ~Stack();
-        void push(T datum);
-        void push(Node<T>* node);
-        void pop();
-        T top();
-        bool empty() { return top_ == nullptr; }
+ public:
+  void push(const T& datum);
+  void pop() { top_ = std::move(top_->next_); }
+  const T& top();
+  bool empty() const { return top_ == nullptr; }
+
+ private:
+  std::unique_ptr<Node<T>> top_;
 };
 
 template <class T>
-Stack<T>::Stack(T datum) {
-    top_ = new Node<T>(datum);
+void Stack<T>::push(const T& datum) {
+  if (!top_) {
+    top_ = std::make_unique<Node<T>>(datum);
+  } else {
+    auto new_top = std::make_unique<Node<T>>(datum);
+    new_top->next_ = std::move(top_);
+    top_ = std::move(new_top);
+  }
 }
 
 template <class T>
-Stack<T>::~Stack() {
-    while (top_ != nullptr)
-        pop();
+const T& Stack<T>::top() {
+  return top_->datum_;
 }
 
-template <class T>
-void Stack<T>::push(T datum) {
-    Node<T>* node = new Node<T>(datum);
-    node->next_ = top_;
-    top_ = node;
-}
-
-template <class T>
-void Stack<T>::push(Node<T>* node) {
-    node->next_ = top_;
-    top_ = node;
-}
-
-template <class T>
-void Stack<T>::pop() {
-    if (top_ == nullptr) {
-        return;
-    } else {
-        Node<T>* tmp = top_;
-        delete top_;
-        top_ = tmp->next_;
-    }
-}
-
-template <class T>
-T Stack<T>::top() {
-    return top_->datum_;
-}
+#endif /* ifndef DV_STACK */

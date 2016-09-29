@@ -1,14 +1,18 @@
-template <class T>
-class Node {
-    public:
-        Node() : datum_() {};
-        Node(T datum);
-        T datum_;
-        Node<T> *next_;
-};
+#ifndef DV_STACK_NODE
+#define DV_STACK_NODE
+
+#include <memory>
+
+template <typename T>
+class Stack;
 
 template <class T>
-Node<T>::Node(T datum) {
-    datum_ = datum;
-    next_ = nullptr;
-}
+class Node {
+ public:
+  friend class Stack<T>;
+  Node(const T& datum) : datum_(datum){};
+  T datum_;
+  std::unique_ptr<Node<T>> next_;
+};
+
+#endif /* ifndef DV_STACK_NODE */
