@@ -9,7 +9,7 @@ class Stack {
  public:
   void push(const T& datum);
   void pop() { top_ = std::move(top_->next_); }
-  const T& top();
+  const T& top() const { return top_->datum_; }
   bool empty() const { return top_ == nullptr; }
 
  private:
@@ -25,11 +25,6 @@ void Stack<T>::push(const T& datum) {
     new_top->next_ = std::move(top_);
     top_ = std::move(new_top);
   }
-}
-
-template <class T>
-const T& Stack<T>::top() {
-  return top_->datum_;
 }
 
 #endif /* ifndef DV_STACK */
