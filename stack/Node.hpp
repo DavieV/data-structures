@@ -11,6 +11,8 @@ class Node {
  public:
   friend class Stack<T>;
   Node(const T& datum) : datum_(datum){};
+
+ private:
   T datum_;
   std::unique_ptr<Node<T>> next_;
 };
