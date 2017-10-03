@@ -1,13 +1,16 @@
-template <class T>
-class Node {
-    public:
-        Node(T data);
-        T data_;
-        Node<T> *next_;
-};
+#include <memory>
 
 template <class T>
-Node<T>::Node(T data) {
-    data_ = data;
-    next_ = nullptr;
-}
+class List;
+
+template <class T>
+class Node {
+ public:
+  Node(const T& data) : data_(data) {}
+
+ private:
+  T data_;
+  std::unique_ptr<Node<T>> next_;
+
+  friend class List<T>;
+};
